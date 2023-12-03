@@ -14,7 +14,7 @@ function invalidate_cloudfront_cache() {
 }
 
 function build_and_deploy_app() {
-  pushd ../../apps/$1
+  pushd apps/$1
 
   VERSION=''
   if [ "$2" != "IGNORE_VERSION_ON_DEPLOY" ]

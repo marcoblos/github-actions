@@ -37,10 +37,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name }}
 
     steps:
       - name: Testing an environment variable
-        run: echo $MY_S3_BUCKET
+        run: echo "Deploying to ${{ github.ref_name }} into $MY_S3_BUCKET"
 
       - uses: actions/checkout@v3
 
