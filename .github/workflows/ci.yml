@@ -6,7 +6,6 @@
 
   function deploy_app() {
     echo "Deploying to S3_BUCKET/$1/$2"
-    # aws s3 cp dist/ s3://test.atimiflagstar.net/$1/$2 --recursive
   }
 
   function invalidate_cloudfront_cache() {

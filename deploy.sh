@@ -7,12 +7,10 @@ function build_app() {
 
 function deploy_app() {
   echo "Deploying to S3_BUCKET/$1/$2"
-  # aws s3 cp dist/ s3://test.atimiflagstar.net/$1/$2 --recursive
 }
 
 function invalidate_cloudfront_cache() {
   echo "Invalidating cloudfront cache"
-  # aws cloudfront create-invalidation --distribution-id EP5QH9K9BVFRD --paths "/host/*" "/auth/*" --no-cli-pager
 }
 
 function build_and_deploy_app() {
