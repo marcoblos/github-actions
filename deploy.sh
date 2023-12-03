@@ -27,10 +27,10 @@ function build_and_deploy_app() {
   popd
 }
 
-build_and_deploy_app shared
-build_and_deploy_app home
-build_and_deploy_app auth
-build_and_deploy_app payment
-build_and_deploy_app shell
-build_and_deploy_app host IGNORE_VERSION_ON_DEPLOY
-invalidate_cloudfront_cache
+# build_and_deploy_app shared
+# build_and_deploy_app home
+# build_and_deploy_app auth
+# build_and_deploy_app payment
+# build_and_deploy_app shell
+# build_and_deploy_app host IGNORE_VERSION_ON_DEPLOY
+# invalidate_cloudfront_cache
