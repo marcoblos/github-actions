@@ -1,0 +1,48 @@
+.common_scripts: &common_scripts |
+  function build_app() {
+    echo "Building $1"
+    npm run build
+  }
+
+  function deploy_app() {
+    echo "Deploying to S3_BUCKET/$1/$2"
+    # aws s3 cp dist/ s3://test.atimiflagstar.net/$1/$2 --recursive
+  }
+
+  function invalidate_cloudfront_cache() {
+    echo "Invalidating cloudfront cache"
+    # aws cloudfront create-invalidation --distribution-id EP5QH9K9BVFRD --paths "/host/*" "/auth/*" --no-cli-pager
+  }
+
+  function build_and_deploy_app() {
+    pushd apps/$1
+
+    VERSION=''
+    if [ "$2" != "IGNORE_VERSION_ON_DEPLOY" ]
+    then
+      VERSION="$(grep version package.json | sed 's/.*"version": "\(.*\)".*/\1/')/"
+    fi
+
+    build_app $1
+    deploy_app $1 $VERSION
+    popd
+  }
+
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Include common scripts into context
+        run: *common_scripts
+
+      - uses: actions/checkout@v3
+
+      - name: Run a one-line script
+        run: build_and_deploy_app shared
