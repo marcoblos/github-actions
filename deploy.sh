@@ -1,5 +1,10 @@
 #!/bin/sh
 
+function install_dependencies() {
+  echo "Installing dependencies of $1"
+  npm install
+}
+
 function build_app() {
   echo "Building $1"
   npm run build
@@ -22,6 +27,7 @@ function build_and_deploy_app() {
     VERSION="$(grep version package.json | sed 's/.*"version": "\(.*\)".*/\1/')/"
   fi
 
+  install_dependencies $1
   build_app $1
   deploy_app $1 $VERSION
   popd
