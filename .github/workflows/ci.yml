@@ -40,10 +40,12 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
+    env:
+      MY_S3_BUCKET: ${{ vars.MY_S3_BUCKET }}
 
     steps:
       - name: Testing an environment variable
-        run: echo "Deploying to ${{ github.ref_name }} into $env.MY_S3_BUCKET"
+        run: echo "Deploying to ${{ github.ref_name }} into $MY_S3_BUCKET and ${{ vars.MY_S3_BUCKET }} and ${vars.MY_S3_BUCKET} and $vars.MY_S3_BUCKET"
 
       - uses: actions/checkout@v3
 

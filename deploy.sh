@@ -11,7 +11,7 @@ function build_app() {
 }
 
 function deploy_app() {
-  echo "Deploying to $env.MY_S3_BUCKET/$1/$2"
+  echo "Deploying to $MY_S3_BUCKET/$1/$2"
 }
 
 function invalidate_cloudfront_cache() {
