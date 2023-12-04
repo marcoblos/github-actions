@@ -18,3 +18,16 @@ jobs:
 
       - name: Testing ${{ matrix.app }}
         run: source deploy.sh && test_app ${{ matrix.app }}
+  
+  run_lint:
+    strategy:
+      matrix:
+        app: [shared, dashboard, login, payment, paymentWidget]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Testing ${{ matrix.app }}
+        run: source deploy.sh && test_app ${{ matrix.app }}

@@ -43,6 +43,15 @@ function test_app() {
   popd
 }
 
+function lint_app() {
+  pushd apps/$1
+
+  install_dependencies $1
+  npm run lint
+
+  popd
+}
+
 # build_and_deploy_app shared
 # build_and_deploy_app home
 # build_and_deploy_app auth
