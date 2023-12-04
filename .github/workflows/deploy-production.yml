@@ -1,0 +1,45 @@
+# This workflow is triggered manually and it can run only from production branch.
+#
+# The target environment for this deployment is always production environment.
+#
+name: Deployment Process - Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: github.ref_protected == 'production'
+    strategy:
+      matrix:
+        app: [shared, dashboard, login, payment, paymentWidget]
+    
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      MY_S3_BUCKET: ${{ vars.MY_S3_BUCKET }}
+
+    steps:
+      - name: Testing an environment variable
+        run: echo "Deploying to production into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
+
+      - uses: actions/checkout@v3
+
+      - name: Build and Deploy to production
+        run: source scripts/github-actions-scripts.sh && build_and_deploy_app ${{ matrix.app }}
+  
+  invalidate_cache:
+    if: github.ref_protected == 'production'
+    needs: [deploy]
+    
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Testing an environment variable
+        run: echo "Deploying to production into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
+
+      - uses: actions/checkout@v3
+
+      - name: Invalidate cache for environment production
+        run: source scripts/github-actions-scripts.sh && invalidate_cloudfront_cache
