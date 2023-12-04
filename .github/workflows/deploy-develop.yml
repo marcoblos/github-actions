@@ -1,0 +1,43 @@
+# This workflow is triggered manually and it can run from any branch.
+#
+# The target environment for this deployment is always development environment.
+#
+name: Deployment Process - Development
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    strategy:
+      matrix:
+        app: [shared, dashboard, login, payment, paymentWidget]
+    
+    runs-on: ubuntu-latest
+    environment: development
+    env:
+      MY_S3_BUCKET: ${{ vars.MY_S3_BUCKET }}
+
+    steps:
+      - name: Testing an environment variable
+        run: echo "Deploying to development into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
+
+      - uses: actions/checkout@v3
+
+      - name: Build and Deploy to development
+        run: source deploy.sh && build_and_deploy_app ${{ matrix.app }}
+  
+  invalidate_cache:
+    needs: [deploy]
+    
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - name: Testing an environment variable
+        run: echo "Deploying to development into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
+
+      - uses: actions/checkout@v3
+
+      - name: Invalidate cache for environment development
+        run: source deploy.sh && invalidate_cloudfront_cache
