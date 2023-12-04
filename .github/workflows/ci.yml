@@ -60,3 +60,21 @@ jobs:
 
       - name: Build and Deploy to ${{ github.ref_name }}
         run: source deploy.sh && build_and_deploy_app ${{ matrix.app }}
+  
+  invalidate_cache:
+    if: github.ref_protected
+    needs: [build]
+    
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name }}
+
+    steps:
+      - name: Testing an environment variable
+        run: echo "Deploying to ${{ github.ref_name }} into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
+
+      - uses: actions/checkout@v3
+
+      - name: Invalidate cache for environment ${{ github.ref_name }}
+        run: source deploy.sh && invalidate_cloudfront_cache
+  
