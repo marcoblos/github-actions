@@ -34,6 +34,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows: ["CI"]
+    types: ['requested']
     branches:
       - 'main'
 
