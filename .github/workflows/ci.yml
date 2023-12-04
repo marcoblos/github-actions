@@ -1,9 +1,13 @@
-# This workflow runs for Pull Requests
+# This workflow runs for Pull Requests and pushes to main branch
 
 name: CI Process
 
 on:
   pull_request:
+
+  push:
+    branches:
+      - main
 
 jobs:
   run_tests:
