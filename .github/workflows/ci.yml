@@ -32,6 +32,15 @@ name: CI
 
 on:
   workflow_dispatch:
+    inputs:
+      BRANCH:
+        description: 'Branch to use'
+        required: true
+        default: 'master'
+        type: choice
+        options:
+        - main
+        - qa
   # workflow_run:
   #   workflows: ["CI"]
   #   types: ['requested']
