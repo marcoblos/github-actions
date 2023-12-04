@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    if: github.ref_protected == 'production'
+    if: github.ref_name == 'production'
     strategy:
       matrix:
         app: [shared, dashboard, login, payment, paymentWidget]
@@ -29,7 +29,7 @@ jobs:
         run: source scripts/github-actions-scripts.sh && build_and_deploy_app ${{ matrix.app }}
   
   invalidate_cache:
-    if: github.ref_protected == 'production'
+    if: github.ref_name == 'production'
     needs: [deploy]
     
     runs-on: ubuntu-latest
