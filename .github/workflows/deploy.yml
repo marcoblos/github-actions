@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     if: github.ref_protected
 
     strategy:
@@ -34,7 +34,7 @@ jobs:
   
   invalidate_cache:
     if: github.ref_protected
-    needs: [build]
+    needs: [deploy]
     
     runs-on: ubuntu-latest
     environment:
