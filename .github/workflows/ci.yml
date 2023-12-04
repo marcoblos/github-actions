@@ -32,15 +32,6 @@ name: CI
 
 on:
   workflow_dispatch:
-    inputs:
-      BRANCH:
-        description: 'Branch to use'
-        required: true
-        default: 'master'
-        type: choice
-        options:
-        - main
-        - qa
   # workflow_run:
   #   workflows: ["CI"]
   #   types: ['requested']
@@ -57,7 +48,7 @@ jobs:
 
     steps:
       - name: Testing an environment variable
-        run: echo "Deploying to ${{ github.ref_name }} into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
+        run: echo "Deploying to ${{ github.ref_name }} into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }} and is protected ${{ github.ref_protected }}"
 
       - uses: actions/checkout@v3
 
