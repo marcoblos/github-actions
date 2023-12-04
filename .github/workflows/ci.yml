@@ -1,80 +1,20 @@
-# Anchors and references does NOT work in GitHub Actions... it sucks...
-# .common_scripts: &common_scripts |
-#   function build_app() {
-#     echo "Building $1"
-#     npm run build
-#   }
+# This workflow runs for Pull Requests
 
-#   function deploy_app() {
-#     echo "Deploying to S3_BUCKET/$1/$2"
-#   }
-
-#   function invalidate_cloudfront_cache() {
-#     echo "Invalidating cloudfront cache"
-#     # aws cloudfront create-invalidation --distribution-id EP5QH9K9BVFRD --paths "/host/*" "/auth/*" --no-cli-pager
-#   }
-
-#   function build_and_deploy_app() {
-#     pushd apps/$1
-
-#     VERSION=''
-#     if [ "$2" != "IGNORE_VERSION_ON_DEPLOY" ]
-#     then
-#       VERSION="$(grep version package.json | sed 's/.*"version": "\(.*\)".*/\1/')/"
-#     fi
-
-#     build_app $1
-#     deploy_app $1 $VERSION
-#     popd
-#   }
-
-name: CI
+name: CI Process
 
 on:
-  workflow_dispatch:
-  # workflow_run:
-  #   workflows: ["CI"]
-  #   types: ['requested']
-  #   branches:
-  #     - 'main'
+  pull_request:
 
 jobs:
-  build:
-    if: github.ref_protected
-
+  run_tests:
     strategy:
       matrix:
         app: [shared, dashboard, login, payment, paymentWidget]
-    
+
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name }}
-    env:
-      MY_S3_BUCKET: ${{ vars.MY_S3_BUCKET }}
 
     steps:
-      - name: Testing an environment variable
-        run: echo "Deploying to ${{ github.ref_name }} into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
-
       - uses: actions/checkout@v3
 
-      - name: Build and Deploy to ${{ github.ref_name }}
-        run: source deploy.sh && build_and_deploy_app ${{ matrix.app }}
-  
-  invalidate_cache:
-    if: github.ref_protected
-    needs: [build]
-    
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name }}
-
-    steps:
-      - name: Testing an environment variable
-        run: echo "Deploying to ${{ github.ref_name }} into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
-
-      - uses: actions/checkout@v3
-
-      - name: Invalidate cache for environment ${{ github.ref_name }}
-        run: source deploy.sh && invalidate_cloudfront_cache
-  
+      - name: Testing ${{ matrix.app }}
+        run: source deploy.sh && test_app ${{ matrix.app }}

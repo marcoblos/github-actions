@@ -30,6 +30,16 @@ function build_and_deploy_app() {
   install_dependencies $1
   build_app $1
   deploy_app $1 $VERSION
+
+  popd
+}
+
+function test_app() {
+  pushd apps/$1
+
+  install_dependencies $1
+  npm test
+
   popd
 }
 
