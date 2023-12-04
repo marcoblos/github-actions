@@ -1,0 +1,48 @@
+# This workflow is triggered automatically after CI Process workflow
+# is succesfully executed, and it run always from main branch.
+#
+# The target environment for this deployment is always QA environment.
+#
+name: Deployment Process - QA
+
+on:
+  workflow_run:
+    workflows: ["CI Process"]
+    branches: [main]
+    types: 
+      - completed
+
+jobs:
+  deploy:
+    strategy:
+      matrix:
+        app: [shared, dashboard, login, payment, paymentWidget]
+    
+    runs-on: ubuntu-latest
+    environment: qa
+    env:
+      MY_S3_BUCKET: ${{ vars.MY_S3_BUCKET }}
+
+    steps:
+      - name: Testing an environment variable
+        run: echo "Deploying to QA into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
+
+      - uses: actions/checkout@v3
+
+      - name: Build and Deploy to QA
+        run: source scripts/github-actions-scripts.sh && build_and_deploy_app ${{ matrix.app }}
+  
+  invalidate_cache:
+    needs: [deploy]
+    
+    runs-on: ubuntu-latest
+    environment: qa
+
+    steps:
+      - name: Testing an environment variable
+        run: echo "Deploying to QA into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
+
+      - uses: actions/checkout@v3
+
+      - name: Invalidate cache for environment qa
+        run: source scripts/github-actions-scripts.sh && invalidate_cloudfront_cache
