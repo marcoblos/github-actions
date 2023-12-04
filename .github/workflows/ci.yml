@@ -40,7 +40,7 @@ on:
 
 jobs:
   build:
-    if: ${{ github.ref_protected != '' }}
+    if: github.ref_protected
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
@@ -49,7 +49,7 @@ jobs:
 
     steps:
       - name: Testing an environment variable
-        run: echo "Deploying to ${{ github.ref_name }} into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }} and github.ref_protected ${{ github.ref_protected }} and github.ref_protected == true ${{ github.ref_protected == true }} and github.ref_protected == '' ${{ github.ref_protected == '' }}"
+        run: echo "Deploying to ${{ github.ref_name }} into ${MY_S3_BUCKET} and ${{ vars.MY_S3_BUCKET }}"
 
       - uses: actions/checkout@v3
 
