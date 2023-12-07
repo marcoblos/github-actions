@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         app: [shared, dashboard, login, payment, paymentWidget]
-    
+
     runs-on: ubuntu-latest
     environment: development
     env:

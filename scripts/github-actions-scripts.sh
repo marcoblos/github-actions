@@ -1,5 +1,10 @@
 #!/bin/sh
 
+function setup_environment_variables() {
+  echo "SHOW_DEV_TOOLS_REACT_QUERY=false" > .env
+  echo "API_BASE_URL=$API_BASE_URL" >> .env
+}
+
 function install_dependencies() {
   echo "Installing dependencies of $1"
   npm install
@@ -38,6 +43,9 @@ function test_app() {
   pushd apps/$1
 
   install_dependencies $1
+  setup_environment_variables
+  ls -lah
+  cat .env
   npm test
 
   popd

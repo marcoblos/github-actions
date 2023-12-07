@@ -16,6 +16,8 @@ jobs:
         app: [shared, dashboard, login, payment, paymentWidget]
 
     runs-on: ubuntu-latest
+    env:
+      API_BASE_URL: https://heeeeeeeeeeeeeeeeeeeeey.com
 
     steps:
       - uses: actions/checkout@v3
